@@ -2,31 +2,77 @@
 
 A secure full-stack e-commerce application with a React frontend, Express API, PostgreSQL (Prisma), and MongoDB for reviews and activity logs.
 
+## Project URLs
+
+| Resource | URL |
+|----------|-----|
+| GitHub Repository | _Add your repo URL here after pushing_ |
+| Frontend (local dev) | http://localhost:5173 |
+| Frontend (Docker) | http://localhost |
+| Backend API | http://localhost:5000/api |
+| Health check | http://localhost:5000/api/health |
+
 ## Tech Stack
 
 | Layer | Technologies |
 |-------|--------------|
-| Frontend | React 19, Vite, TypeScript, Tailwind CSS v4, React Router, TanStack Query, Axios |
+| Frontend | React 19, Vite, TypeScript, Tailwind CSS v4, React Router, TanStack Query, Axios, Context API |
 | Backend | Express 5, TypeScript, Zod, JWT, bcrypt, Multer, Nodemailer |
-| Databases | PostgreSQL (Prisma), MongoDB (Mongoose) |
-| Testing | Jest + Supertest (backend), Vitest + RTL + MSW (frontend) |
+| Databases | PostgreSQL (Prisma) — users, products, categories, cart; MongoDB (Mongoose) — reviews, activity logs |
+| Testing | Jest + Supertest (backend), Vitest + React Testing Library + MSW (frontend) |
 | DevOps | Docker, Docker Compose, nginx |
+
+## Features
+
+### Authentication & users
+- Register, login, logout (client-side token clear)
+- JWT authentication with protected routes
+- Role-based access control (`ADMIN` vs `CUSTOMER`)
+- User profile view and name update
+
+### Products & shopping
+- Product listing with search, filter, sort, and pagination
+- Product detail pages with reviews
+- Shopping cart (add, update quantity, remove, clear)
+- Category management (admin)
+- Product CRUD with image upload (admin)
+- Store statistics and recent activity (admin)
+
+### Email
+- Welcome email on registration via Nodemailer (optional — skipped if SMTP is not configured)
+
+## Frontend Pages
+
+| Page | Path | Access |
+|------|------|--------|
+| Home | `/` | Public |
+| Product listing | `/products` | Public |
+| Product details | `/products/:id` | Public |
+| Login | `/login` | Public |
+| Register | `/register` | Public |
+| Cart | `/cart` | Logged-in users |
+| Profile | `/profile` | Logged-in users |
+| Admin dashboard | `/admin` | Admin only |
 
 ## Prerequisites
 
 - **Node.js 20+**
 - **npm**
-- **Docker Desktop** (for containerized setup)
+- **Docker Desktop** (for databases and full Docker setup)
 - **Git**
 
 ## Project Structure
 
 ```
-├── backend/          # Express API
-├── frontend/         # React SPA
-├── docker-compose.yml
-├── .env.example      # Root env for Docker Compose
-└── README.md
+├── backend/              # Express API, Prisma, tests
+│   ├── prisma/           # Schema, migrations, seed
+│   ├── src/              # Routes, controllers, services
+│   └── tests/            # Jest unit + integration tests
+├── frontend/             # React SPA, Vitest tests
+├── docker-compose.yml    # postgres, mongodb, backend, frontend
+├── .env.example          # Root env for Docker Compose
+├── README.md
+└── README.txt
 ```
 
 ---
@@ -43,7 +89,7 @@ docker compose up -d postgres mongodb
 
 ```bash
 cd backend
-cp .env.example .env
+cp .env.example .env    # Windows PowerShell: copy .env.example .env
 npm install
 npx prisma migrate deploy
 npm run seed
@@ -58,7 +104,7 @@ In a new terminal:
 
 ```bash
 cd frontend
-cp .env.example .env
+cp .env.example .env    # Windows PowerShell: copy .env.example .env
 npm install
 npm run dev
 ```
@@ -67,12 +113,32 @@ App runs at **http://localhost:5173**
 
 ---
 
+## What to Expect After Setup
+
+After seeding, you should see:
+
+- **12 sample products** across 5 categories (Audio, Electronics, Wearables, etc.)
+- **2 test accounts** (admin and customer — see credentials below)
+- **Home page** with featured products and a link to the full catalog
+- **Product listing** with search, filters, sorting, and pagination
+- **Product details** with add-to-cart and review submission (when logged in)
+- **Admin dashboard** at `/admin` for product/category management and store stats
+- **Welcome email** logged as skipped in the backend console if SMTP is empty (registration still works)
+
+Quick smoke test:
+1. Open http://localhost:5173
+2. Browse products on the home and `/products` pages
+3. Log in as `customer@store.com` → add an item to cart
+4. Log in as `admin@store.com` → open `/admin` and view stats or edit a product
+
+---
+
 ## Docker (Full Stack)
 
 ### 1. Configure environment
 
 ```bash
-cp .env.example .env
+cp .env.example .env    # Windows PowerShell: copy .env.example .env
 ```
 
 Edit `.env` and set a strong `JWT_SECRET` before deploying.
@@ -149,13 +215,28 @@ docker compose down
 
 ## Testing
 
+Start PostgreSQL before backend integration tests:
+
 ```bash
-# Backend
+docker compose up -d postgres
+```
+
+```bash
+# Backend (Jest unit + Supertest integration)
 cd backend && npm test
 
-# Frontend
+# Frontend (Vitest + React Testing Library + MSW)
 cd frontend && npm test
 ```
+
+### Test coverage
+
+| Area | Framework | Location |
+|------|-----------|----------|
+| Backend unit tests | Jest | `backend/tests/unit/` (JWT, password, RBAC) |
+| Backend integration tests | Jest + Supertest | `backend/tests/integration/` (auth, products, cart) |
+| Frontend component tests | Vitest + RTL | `frontend/src/**/*.test.tsx` |
+| API mocking | MSW | `frontend/src/mocks/` |
 
 ---
 
@@ -176,11 +257,15 @@ cd frontend && npm test
 | `FRONTEND_URL` | Allowed CORS origin |
 | `VITE_API_URL` | API URL baked into frontend build |
 | `UPLOAD_DIR` | Uploaded images directory |
-| `SMTP_*` | Optional email settings |
+| `SMTP_*` | Optional email settings (welcome email skipped if empty) |
 
 ### Backend `.env` (local dev)
 
 Copy from `backend/.env.example`. Use `localhost` hostnames for databases.
+
+```
+FRONTEND_URL=http://localhost:5173
+```
 
 ### Frontend `.env` (local dev)
 
@@ -225,10 +310,12 @@ docker build -t ecommerce-frontend ./frontend
 | Issue | Fix |
 |-------|-----|
 | `prisma migrate` fails | Ensure PostgreSQL is running and `DATABASE_URL` is correct |
-| CORS errors | Match `FRONTEND_URL` in backend to your frontend origin |
-| Empty product list | Run `npm run seed` (local) or `docker compose exec backend npx tsx prisma/seed.ts` |
+| CORS errors | Match `FRONTEND_URL` in backend to your frontend origin (`http://localhost:5173` for local dev) |
+| Empty product list | Run `npm run seed` (local) or `docker compose exec backend npx prisma db seed` |
 | Docker won't start | Ensure Docker Desktop is running; check `docker compose logs` |
 | Integration tests skip DB tests | Start PostgreSQL (`docker compose up -d postgres`) before `npm test` in backend |
+| Welcome email not sent | Expected when SMTP is empty; configure `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS` in `backend/.env` |
+| Product update fails on large price | Price must fit `DECIMAL(10,2)` — max `99,999,999.99` |
 
 ---
 
