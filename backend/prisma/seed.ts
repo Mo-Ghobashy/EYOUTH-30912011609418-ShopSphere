@@ -18,88 +18,124 @@ const categories = [
 
 const products = [
   {
-    name: 'Sequoia Inspiring Headphones',
-    description: 'Premium over-ear headphones with clear sound and deep bass.',
-    price: 249.99,
-    stock: 40,
+    name: 'Sony WH-1000XM5 Wireless Headphones',
+    description:
+      'Industry-leading noise cancellation with two processors, 8 microphones, and up to 30 hours of battery life. Exceptional call clarity and premium comfort.',
+    price: 399.99,
+    stock: 35,
     categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80&auto=format&fit=crop',
   },
   {
-    name: 'New Gen X-Bud',
-    description: 'Compact wireless earbuds with active noise cancellation.',
-    price: 129.99,
-    stock: 75,
-    categorySlug: 'audio',
-  },
-  {
-    name: 'Light Grey Surface Headphone',
-    description: 'Lightweight on-ear headphones boosted with bass.',
-    price: 89.99,
+    name: 'Apple AirPods Pro (2nd Gen)',
+    description:
+      'Active noise cancellation, Adaptive Transparency, personalized spatial audio, and the MagSafe charging case with up to 30 hours of listening time.',
+    price: 249.0,
     stock: 60,
     categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80&auto=format&fit=crop',
   },
   {
-    name: 'VR Vision Headset',
-    description: 'Immersive VR headset for next-gen experiences.',
-    price: 399.99,
-    stock: 25,
-    categorySlug: 'wearables',
+    name: 'Bose QuietComfort Ultra Headphones',
+    description:
+      'Flagship wireless headphones with world-class noise cancellation, immersive spatial audio, and 24 hours of battery life in a lightweight design.',
+    price: 429.0,
+    stock: 20,
+    categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=80&auto=format&fit=crop',
   },
   {
-    name: 'Pulse Smart Watch',
-    description: 'Track fitness, notifications, and health metrics.',
-    price: 199.99,
-    stock: 50,
-    categorySlug: 'wearables',
+    name: 'Audio-Technica ATH-M50x',
+    description:
+      'Professional studio monitor headphones with critically acclaimed sound, 90-degree swiveling earcups, and detachable cables.',
+    price: 169.0,
+    stock: 40,
+    categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&q=80&auto=format&fit=crop',
   },
   {
-    name: 'Cube Mini Speaker',
-    description: 'Portable Bluetooth speaker with 360-degree sound.',
-    price: 59.99,
+    name: 'JBL Tune 510BT On-Ear Headphones',
+    description:
+      'Wireless on-ear headphones with JBL Pure Bass sound, up to 40 hours of battery, and fast charging — 10 minutes gives you 2 more hours.',
+    price: 49.95,
     stock: 100,
-    categorySlug: 'electronics',
+    categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=800&q=80&auto=format&fit=crop',
   },
   {
-    name: 'Nebula 4K Monitor',
-    description: '27-inch 4K display with ultra-thin bezels.',
-    price: 449.99,
-    stock: 30,
-    categorySlug: 'electronics',
-  },
-  {
-    name: 'Aero Mechanical Keyboard',
-    description: 'RGB mechanical keyboard with tactile switches.',
-    price: 149.99,
+    name: 'Sony WF-1000XM5 Earbuds',
+    description:
+      'The smallest and lightest noise-canceling earbuds from Sony with industry-leading ANC, 8 hours per charge, and LDAC hi-res audio support.',
+    price: 299.99,
     stock: 45,
-    categorySlug: 'accessories',
+    categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=800&q=80&auto=format&fit=crop',
   },
   {
-    name: 'Glide Wireless Mouse',
-    description: 'Ergonomic wireless mouse with precision tracking.',
-    price: 49.99,
-    stock: 80,
-    categorySlug: 'accessories',
+    name: 'Beats Studio Pro',
+    description:
+      'Premium wireless headphones with fully adaptive noise cancellation, personalized spatial audio, and lossless audio via USB-C. Up to 40 hours of playback.',
+    price: 349.99,
+    stock: 25,
+    categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=800&q=80&auto=format&fit=crop',
   },
   {
-    name: 'Thunder Pro Controller',
-    description: 'Low-latency gaming controller for PC and console.',
-    price: 69.99,
+    name: 'Marshall Major IV',
+    description:
+      'Iconic on-ear Bluetooth headphones with over 80 hours of playtime, wireless charging, and the signature Marshall sound with deep bass.',
+    price: 149.99,
+    stock: 50,
+    categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=800&q=80&auto=format&fit=crop',
+  },
+  {
+    name: 'Anker Soundcore Space Q45',
+    description:
+      'Adaptive active noise cancellation that adjusts to your surroundings, 50-hour playtime, and hi-res LDAC audio support.',
+    price: 129.99,
+    stock: 70,
+    categorySlug: 'audio',
+    imageUrl:
+      'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&q=80&auto=format&fit=crop',
+  },
+  {
+    name: 'SteelSeries Arctis Nova 7 Gaming Headset',
+    description:
+      'Wireless gaming headset with simultaneous 2.4GHz + Bluetooth, ClearCast Gen 2 mic, and 38-hour battery for PC, PlayStation, and mobile.',
+    price: 179.99,
+    stock: 30,
+    categorySlug: 'gaming',
+    imageUrl:
+      'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=800&q=80&auto=format&fit=crop',
+  },
+  {
+    name: 'JBL Charge 5 Portable Speaker',
+    description:
+      'Portable waterproof Bluetooth speaker with bold JBL Pro Sound, deep bass, 20 hours of playtime, and a built-in power bank.',
+    price: 179.95,
     stock: 55,
-    categorySlug: 'gaming',
+    categorySlug: 'electronics',
+    imageUrl:
+      'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&q=80&auto=format&fit=crop',
   },
   {
-    name: 'Shadow RGB Mousepad',
-    description: 'Extended mousepad with customizable RGB lighting.',
-    price: 34.99,
-    stock: 90,
-    categorySlug: 'gaming',
-  },
-  {
-    name: 'Crystal USB-C Hub',
-    description: '7-in-1 USB-C hub with HDMI and fast charging.',
-    price: 79.99,
-    stock: 65,
-    categorySlug: 'accessories',
+    name: 'Apple Watch Series 9',
+    description:
+      'Brighter Always-On Retina display, double-tap gesture, advanced health sensors, and up to 18 hours of battery life.',
+    price: 399.0,
+    stock: 28,
+    categorySlug: 'wearables',
+    imageUrl:
+      'https://images.unsplash.com/photo-1551816230-ef5deaed4a26?w=800&q=80&auto=format&fit=crop',
   },
 ];
 
@@ -140,6 +176,9 @@ async function main(): Promise<void> {
   const categoryRecords = await prisma.category.findMany();
   const categoryBySlug = Object.fromEntries(categoryRecords.map((c) => [c.slug, c.id]));
 
+  await prisma.cartItem.deleteMany();
+  await prisma.product.deleteMany();
+
   for (const product of products) {
     const categoryId = categoryBySlug[product.categorySlug];
     if (!categoryId) continue;
@@ -156,6 +195,7 @@ async function main(): Promise<void> {
           price: product.price,
           stock: product.stock,
           categoryId,
+          imageUrl: product.imageUrl ?? null,
         },
       });
     } else {
@@ -166,6 +206,7 @@ async function main(): Promise<void> {
           price: product.price,
           stock: product.stock,
           categoryId,
+          imageUrl: product.imageUrl ?? null,
         },
       });
     }
