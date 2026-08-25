@@ -17,20 +17,6 @@ services:
       timeout: 5s
       retries: 10
 
-  mongodb:
-    image: mongo:7
-    container_name: ecommerce-mongodb
-    restart: unless-stopped
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongodata:/data/db
-    healthcheck:
-      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
   backend:
     build:
       context: ./backend
@@ -44,13 +30,10 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-ecommerce}
       DIRECT_DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-ecommerce}
-      MONGODB_URI: mongodb://mongodb:27017/${POSTGRES_DB:-ecommerce}
     volumes:
       - uploads:/app/uploads
     depends_on:
       postgres:
-        condition: service_healthy
-      mongodb:
         condition: service_healthy
     healthcheck:
       test:
@@ -80,5 +63,4 @@ services:
 
 volumes:
   pgdata:
-  mongodata:
   uploads:

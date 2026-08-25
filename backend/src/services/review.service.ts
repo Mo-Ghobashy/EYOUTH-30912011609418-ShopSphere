@@ -1,4 +1,4 @@
-import { Review } from '../models/Review';
+import { prisma } from '../config/prisma';
 import { reviewListQuerySchema } from '../schemas/review.schema';
 
 export async function getProductReviews(productId: string, query: unknown) {
@@ -6,8 +6,13 @@ export async function getProductReviews(productId: string, query: unknown) {
   const skip = (page - 1) * limit;
 
   const [data, total] = await Promise.all([
-    Review.find({ productId }).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
-    Review.countDocuments({ productId }),
+    prisma.review.findMany({
+      where: { productId },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
+    }),
+    prisma.review.count({ where: { productId } }),
   ]);
 
   return {
@@ -24,25 +29,25 @@ export async function createProductReview(
   userName: string,
   input: { rating: number; comment: string },
 ) {
-  return Review.create({
-    productId,
-    userId,
-    userName,
-    rating: input.rating,
-    comment: input.comment,
+  return prisma.review.create({
+    data: {
+      productId,
+      userId,
+      userName,
+      rating: input.rating,
+      comment: input.comment,
+    },
   });
 }
 
 export async function getReviewStats() {
-  const [totalReviews, avgResult] = await Promise.all([
-    Review.countDocuments(),
-    Review.aggregate<{ _id: null; avgRating: number }>([
-      { $group: { _id: null, avgRating: { $avg: '$rating' } } },
-    ]),
+  const [totalReviews, agg] = await Promise.all([
+    prisma.review.count(),
+    prisma.review.aggregate({ _avg: { rating: true } }),
   ]);
 
   return {
     totalReviews,
-    averageRating: avgResult[0]?.avgRating ?? 0,
+    averageRating: agg._avg.rating ?? 0,
   };
 }

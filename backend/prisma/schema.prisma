@@ -11,14 +11,23 @@ enum Role {
   ADMIN
 }
 
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model User {
-  id           String     @id @default(uuid())
-  email        String     @unique
+  id           String        @id @default(uuid())
+  email        String        @unique
   passwordHash String
   name         String
-  role         Role       @default(CUSTOMER)
-  createdAt    DateTime   @default(now())
+  role         Role          @default(CUSTOMER)
+  createdAt    DateTime      @default(now())
   cartItems    CartItem[]
+  orders       Order[]
+  reviews      Review[]
+  activityLogs ActivityLog[]
 }
 
 model Category {
@@ -39,6 +48,7 @@ model Product {
   category    Category   @relation(fields: [categoryId], references: [id])
   createdAt   DateTime   @default(now())
   cartItems   CartItem[]
+  reviews     Review[]
 }
 
 model CartItem {
@@ -50,4 +60,61 @@ model CartItem {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([userId, productId])
+}
+
+model Order {
+  id             String      @id @default(uuid())
+  userId         String
+  user           User        @relation(fields: [userId], references: [id])
+  status         OrderStatus @default(PENDING)
+  subtotal       Decimal     @db.Decimal(10, 2)
+  shipping       Decimal     @db.Decimal(10, 2)
+  total          Decimal     @db.Decimal(10, 2)
+  fullName       String
+  email          String
+  phone          String
+  address        String
+  city           String
+  zip            String
+  country        String
+  cardBrand      String
+  cardLast4      String
+  transactionRef String      @unique
+  createdAt      DateTime    @default(now())
+  items          OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  name      String
+  price     Decimal @db.Decimal(10, 2)
+  quantity  Int
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userName  String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([action])
 }

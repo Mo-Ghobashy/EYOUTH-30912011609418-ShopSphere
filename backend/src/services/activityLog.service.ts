@@ -1,4 +1,4 @@
-import { ActivityLog } from '../models/ActivityLog';
+import { prisma } from '../config/prisma';
 
 interface LogActivityInput {
   userId?: string;
@@ -8,7 +8,13 @@ interface LogActivityInput {
 
 export async function logActivity({ userId, action, metadata }: LogActivityInput): Promise<void> {
   try {
-    await ActivityLog.create({ userId, action, metadata });
+    await prisma.activityLog.create({
+      data: {
+        userId,
+        action,
+        metadata: metadata ? JSON.parse(JSON.stringify(metadata)) : undefined,
+      },
+    });
   } catch (error) {
     console.error('Failed to write activity log:', error);
   }
