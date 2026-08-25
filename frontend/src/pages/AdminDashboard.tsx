@@ -156,7 +156,7 @@ export function AdminDashboard() {
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 tab === item.id
                   ? 'bg-ink text-white'
-                  : 'bg-canvas text-ink hover:bg-white'
+                  : 'bg-canvas text-ink hover:bg-card'
               }`}
             >
               {item.label}
@@ -174,6 +174,8 @@ export function AdminDashboard() {
               {[
                 { label: 'Products', value: statsQuery.data.totalProducts },
                 { label: 'Users', value: statsQuery.data.totalUsers },
+                { label: 'Orders', value: statsQuery.data.totalOrders },
+                { label: 'Revenue', value: formatPrice(statsQuery.data.totalRevenue) },
                 { label: 'Reviews', value: statsQuery.data.totalReviews },
                 { label: 'Avg Rating', value: statsQuery.data.averageRating },
               ].map((card) => (
@@ -438,14 +440,14 @@ export function AdminDashboard() {
             <ul className="mt-4 space-y-3">
               {statsQuery.data.recentActivity.map((entry, index) => {
                 const activity = entry as {
-                  _id?: string;
+                  id?: string;
                   action?: string;
                   userId?: string;
                   createdAt?: string;
                 };
                 return (
                   <li
-                    key={activity._id ?? index}
+                    key={activity.id ?? index}
                     className="rounded-2xl bg-canvas px-4 py-3 text-sm"
                   >
                     <span className="font-medium text-ink">{activity.action ?? 'UNKNOWN'}</span>

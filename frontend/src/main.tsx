@@ -7,6 +7,14 @@ import { AuthProvider } from './context/AuthContext.tsx';
 import { CartProvider } from './context/CartContext.tsx';
 import './index.css';
 
+const savedTheme = localStorage.getItem('theme');
+if (
+  savedTheme === 'dark' ||
+  (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
+) {
+  document.documentElement.classList.add('dark');
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

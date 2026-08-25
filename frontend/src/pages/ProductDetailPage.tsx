@@ -102,7 +102,7 @@ export function ProductDetailPage() {
           <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
             <span
               className={`rounded-full px-3 py-1 font-medium ${
-                outOfStock ? 'bg-red-100 text-red-700' : 'bg-canvas text-ink'
+                outOfStock ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'
               }`}
             >
               {outOfStock ? 'Out of stock' : `${product.stock} in stock`}
@@ -159,7 +159,7 @@ export function ProductDetailPage() {
         {reviewsQuery.data && reviewsQuery.data.data.length > 0 && (
           <ul className="mt-4 space-y-4">
             {reviewsQuery.data.data.map((review) => (
-              <li key={review._id} className="rounded-2xl bg-canvas p-4">
+              <li key={review.id} className="rounded-2xl bg-canvas p-4">
                 <div className="flex items-center justify-between gap-4">
                   <p className="font-medium text-ink">{review.userName}</p>
                   <p className="text-sm font-semibold text-accent">{review.rating} ★</p>

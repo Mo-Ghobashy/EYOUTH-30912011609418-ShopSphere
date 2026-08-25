@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-canvas: #f0f0f0;
   --color-card: #ffffff;
@@ -26,9 +28,37 @@ body {
   min-height: 100vh;
   font-family: var(--font-sans);
   color: var(--color-ink);
-  background: linear-gradient(135deg, #d8dde6 0%, #eef1f6 45%, #dfe5ee 100%);
+  background-color: #eef1f6;
+  background-image:
+    radial-gradient(1100px 550px at 85% -10%, rgba(37, 99, 235, 0.14), transparent 60%),
+    radial-gradient(900px 500px at -15% 15%, rgba(198, 241, 53, 0.22), transparent 55%),
+    radial-gradient(800px 600px at 50% 115%, rgba(56, 189, 248, 0.12), transparent 60%),
+    linear-gradient(180deg, #f6f8fc 0%, #e7ecf4 100%);
+  background-attachment: fixed;
 }
 
 #root {
   min-height: 100vh;
+}
+
+.dark {
+  --color-canvas: #141c2e;
+  --color-card: #1d2942;
+  --color-ink: #f1f5f9;
+  --color-muted: #9aa8bf;
+  --color-accent: #60a5fa;
+  --shadow-bento: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --shadow-bento-sm: 0 4px 16px rgba(0, 0, 0, 0.35);
+
+  background-color: #0f1626;
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #0f1626;
+  background-image:
+    radial-gradient(1100px 550px at 85% -10%, rgba(96, 165, 250, 0.12), transparent 60%),
+    radial-gradient(900px 500px at -15% 15%, rgba(198, 241, 53, 0.07), transparent 55%),
+    radial-gradient(800px 600px at 50% 115%, rgba(129, 140, 248, 0.1), transparent 60%),
+    linear-gradient(180deg, #101a30 0%, #0d1322 100%);
 }

@@ -12,6 +12,43 @@ import { getImageUrl } from '../utils/image';
 
 const swatches = ['#2563EB', '#F97316', '#22C55E', '#EF4444', '#38BDF8'];
 
+const perks = [
+  {
+    title: 'Free Shipping',
+    description: 'On every order over $50, delivered in 2–4 days.',
+    iconClass: 'bg-blue-100 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <circle cx="7" cy="18" r="1.8" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="17" cy="18" r="1.8" stroke="currentColor" strokeWidth="1.8" />
+      </svg>
+    ),
+  },
+  {
+    title: '2-Year Warranty',
+    description: 'Every product covered with hassle-free protection.',
+    iconClass: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    title: '30-Day Returns',
+    description: 'Changed your mind? Send it back, no questions asked.',
+    iconClass: 'bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 10a8 8 0 1 1 2.3 5.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        <path d="M4 5v5h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+];
+
 export function HomePage() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: queryKeys.products.list({ limit: 4, sort: 'newest' }),
@@ -49,14 +86,14 @@ export function HomePage() {
           <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div className="max-w-xl">
               <span className="inline-flex items-center gap-2 rounded-full bg-canvas px-4 py-1.5 text-xs font-medium text-muted">
-                Music is Classic
+                Welcome to ShopSphere
               </span>
-              <h1 className="mt-5 text-4xl font-bold leading-tight text-ink sm:text-5xl">
-                {featured ? featured.name : 'Discover Premium Audio'}
+              <h1 className="mt-5 text-3xl font-bold leading-tight text-ink sm:text-5xl">
+                {featured ? featured.name : 'Discover Premium Audio at ShopSphere'}
               </h1>
               <p className="mt-4 max-w-md text-muted">
                 {featured?.description ??
-                  'Clear sounds. Making your dream music come true — stay with premium gear from Store.'}
+                  'Clear sounds. Making your dream music come true — shop premium gear at ShopSphere.'}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <CTAButton to="/products">View All Products</CTAButton>
@@ -72,7 +109,7 @@ export function HomePage() {
               <img
                 src={getImageUrl(featured.imageUrl)}
                 alt={featured.name}
-                className="mx-auto h-56 w-56 rounded-[32px] object-cover shadow-bento lg:h-64 lg:w-64"
+                className="mx-auto h-44 w-44 rounded-[32px] object-cover shadow-bento sm:h-56 sm:w-56 lg:h-64 lg:w-64"
               />
             )}
           </div>
@@ -164,6 +201,69 @@ export function HomePage() {
           </BentoCard>
         </div>
       </div>
+      <div className="grid gap-4 sm:grid-cols-3">
+        {perks.map((perk) => (
+          <BentoCard key={perk.title} className="flex items-start gap-4">
+            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${perk.iconClass}`}>
+              {perk.icon}
+            </span>
+            <span>
+              <p className="font-semibold text-ink">{perk.title}</p>
+              <p className="mt-1 text-sm text-muted">{perk.description}</p>
+            </span>
+          </BentoCard>
+        ))}
+      </div>
+
+      <BentoCard padding="lg" className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-violet-600 to-fuchsia-500 text-white">
+        <div className="relative z-10 max-w-2xl">
+          <h2 className="text-3xl font-bold leading-tight sm:text-4xl">
+            Sound. Style. Sphere.
+          </h2>
+          <p className="mt-4 leading-relaxed text-white/85">
+            ShopSphere brings the world&apos;s best audio and tech into one place. From
+            studio-grade headphones to everyday earbuds, we curate gear that makes
+            every moment sound better — backed by fast shipping, real warranties,
+            and support that actually answers.
+          </p>
+          <CTAButton to="/products" className="mt-8">
+            Start exploring
+          </CTAButton>
+        </div>
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/15 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-20 right-32 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
+      </BentoCard>
+
+      <BentoCard padding="lg" className="relative overflow-hidden bg-gradient-to-br from-lime-50 via-card to-amber-50 dark:from-lime-950/30 dark:via-card dark:to-amber-950/20">
+        <div className="grid items-center gap-6 lg:grid-cols-[1fr_auto]">
+          <div>
+            <h2 className="text-2xl font-bold text-ink">Never miss a drop</h2>
+            <p className="mt-2 max-w-lg text-sm text-muted">
+              Join the ShopSphere list for early access to new releases, exclusive
+              offers, and member-only deals.
+            </p>
+          </div>
+          <form
+            className="flex w-full max-w-md flex-col gap-3 sm:flex-row lg:w-auto"
+            onSubmit={(event) => event.preventDefault()}
+          >
+            <input
+              type="email"
+              required
+              placeholder="you@example.com"
+              aria-label="Email address"
+              className="w-full min-w-0 rounded-full border border-canvas bg-canvas px-5 py-3 text-sm outline-none focus:border-accent/40"
+            />
+            <button
+              type="submit"
+              className="shrink-0 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </BentoCard>
     </div>
   );
 }
+

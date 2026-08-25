@@ -33,7 +33,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <p className="mt-1 text-xs text-muted">{product.category.name}</p>
             )}
           </div>
-          <span className="shrink-0 rounded-full bg-canvas px-3 py-1 text-sm font-semibold text-ink">
+          <span className="shrink-0 rounded-full bg-accent/10 px-3 py-1 text-sm font-semibold text-accent">
             {formatPrice(product.price)}
           </span>
         </div>

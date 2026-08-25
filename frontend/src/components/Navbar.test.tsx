@@ -29,14 +29,14 @@ vi.mock('../context/CartContext', () => ({
 }));
 
 describe('Navbar', () => {
-  it('renders store branding and auth links for guests', () => {
+  it('renders ShopSphere branding and auth links for guests', () => {
     render(
       <MemoryRouter>
         <Navbar />
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole('link', { name: /store/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /shopsphere/i })).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search products...')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Login' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Sign up' })).toBeInTheDocument();

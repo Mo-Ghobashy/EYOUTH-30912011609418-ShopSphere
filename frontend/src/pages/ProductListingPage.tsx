@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { categoriesApi, productsApi } from '../api/endpoints';
 import { queryKeys } from '../api/queryKeys';
@@ -41,6 +41,7 @@ function toQueryParams(
 
 export function ProductListingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [showFilters, setShowFilters] = useState(false);
   const search = searchParams.get('search') ?? '';
   const filters = useMemo(() => parseFilters(searchParams), [searchParams]);
 
@@ -96,18 +97,43 @@ export function ProductListingPage() {
       </BentoCard>
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <FilterSidebar
-          categories={categoriesQuery.data ?? []}
-          values={{
-            category: filters.category,
-            minPrice: filters.minPrice,
-            maxPrice: filters.maxPrice,
-            sort: filters.sort,
-          }}
-          onChange={handleFilterChange}
-        />
+        <div className={showFilters ? 'space-y-4' : 'hidden space-y-4 lg:block'}>
+          <button
+            type="button"
+            onClick={() => setShowFilters(false)}
+            className="w-full rounded-2xl bg-card px-4 py-3 text-sm font-semibold text-ink shadow-bento-sm lg:hidden"
+          >
+            Hide filters
+          </button>
+          <FilterSidebar
+            categories={categoriesQuery.data ?? []}
+            values={{
+              category: filters.category,
+              minPrice: filters.minPrice,
+              maxPrice: filters.maxPrice,
+              sort: filters.sort,
+            }}
+            onChange={handleFilterChange}
+          />
+        </div>
 
         <div className="space-y-6">
+          <button
+            type="button"
+            onClick={() => setShowFilters(true)}
+            className="flex w-full items-center justify-between rounded-bento bg-card px-5 py-3.5 text-sm font-semibold text-ink shadow-bento-sm lg:hidden"
+          >
+            Filters
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 6h16M7 12h10M10 18h4"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+
           {productsQuery.isLoading && <ProductGridSkeleton count={8} />}
 
           {productsQuery.error && (

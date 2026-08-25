@@ -46,7 +46,7 @@ export function LoginPage() {
     <div className="mx-auto max-w-md">
       <BentoCard padding="lg">
         <h1 className="text-3xl font-bold text-ink">Welcome back</h1>
-        <p className="mt-2 text-sm text-muted">Sign in to your Store account</p>
+        <p className="mt-2 text-sm text-muted">Sign in to your ShopSphere account</p>
 
         <form className="mt-8 space-y-5" onSubmit={(event) => void handleSubmit(event)}>
           <label className="block text-sm font-medium text-ink">
@@ -100,3 +100,4 @@ export function LoginPage() {
     </div>
   );
 }
+
