@@ -42,7 +42,7 @@ export interface PaginatedResponse<T> {
 }
 
 export interface Review {
-  _id: string;
+  id: string;
   productId: string;
   userId: string;
   userName: string;
@@ -54,6 +54,8 @@ export interface Review {
 export interface StoreStats {
   totalProducts: number;
   totalUsers: number;
+  totalOrders: number;
+  totalRevenue: number;
   totalReviews: number;
   averageRating: number;
   recentActivity: unknown[];
@@ -67,4 +69,32 @@ export interface ProductListParams {
   sort?: 'price_asc' | 'price_desc' | 'name' | 'newest';
   page?: number;
   limit?: number;
+}
+
+export interface CheckoutPayload {
+  shipping: {
+    fullName: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    zip: string;
+    country: string;
+  };
+  payment: {
+    cardHolder: string;
+    cardNumber: string;
+    expiry: string;
+    cvc: string;
+  };
+}
+
+export interface OrderConfirmation {
+  orderId: string;
+  status: 'PAID';
+  subtotal: string;
+  shipping: string;
+  total: string;
+  transactionRef: string;
+  createdAt: string;
 }

@@ -4,6 +4,7 @@ import { AdminRoute } from './routes/AdminRoute';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { CartPage } from './pages/CartPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
@@ -23,6 +24,7 @@ export default function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="cart" element={<CartPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
           <Route path="profile" element={<ProfilePage />} />
         </Route>
 

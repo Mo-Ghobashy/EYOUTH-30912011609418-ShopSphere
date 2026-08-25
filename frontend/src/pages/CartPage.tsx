@@ -112,10 +112,32 @@ export function CartPage() {
             <span className="text-muted">Subtotal</span>
             <span className="font-semibold text-ink">{formatPrice(subtotal)}</span>
           </div>
-          <p className="mt-4 text-xs text-muted">Checkout is not implemented in this demo.</p>
-          <CTAButton to="/products" className="mt-6 w-full justify-center">
-            Continue shopping
-          </CTAButton>
+          <p className="mt-2 text-xs text-muted">
+            {subtotal >= 50
+              ? 'You qualify for free shipping!'
+              : `Free shipping on orders over $50 — add ${formatPrice(50 - subtotal)} more.`}
+          </p>
+
+          <div className="mt-6 space-y-3">
+            <CTAButton to="/checkout" className="w-full justify-center">
+              Proceed to payment
+            </CTAButton>
+            <CTAButton to="/products" variant="dark" className="w-full justify-center">
+              Continue shopping
+            </CTAButton>
+          </div>
+
+          <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M6 10V8a6 6 0 1 1 12 0v2M5 10h14v11H5z"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Secure checkout — encrypted payment
+          </p>
         </BentoCard>
       </div>
     </div>

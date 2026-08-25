@@ -1,6 +1,8 @@
 import type {
   CartItem,
   Category,
+  CheckoutPayload,
+  OrderConfirmation,
   PaginatedResponse,
   Product,
   ProductListParams,
@@ -66,6 +68,11 @@ export const cartApi = {
   remove: (itemId: string) => apiClient.delete(`/cart/${itemId}`),
 
   clear: () => apiClient.delete('/cart'),
+};
+
+export const ordersApi = {
+  checkout: (data: CheckoutPayload) =>
+    apiClient.post<{ data: OrderConfirmation }>('/orders/checkout', data),
 };
 
 export const reviewsApi = {
