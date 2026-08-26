@@ -4,7 +4,11 @@ export const TOKEN_KEY = 'token';
 export const USER_KEY = 'user';
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:5000/api',
+  baseURL:
+    import.meta.env.VITE_API_URL ??
+    (import.meta.env.PROD
+      ? 'https://fullstack-ecommerce-store-iq3hj58wr.vercel.app/api'
+      : 'http://localhost:5000/api'),
   headers: {
     'Content-Type': 'application/json',
   },

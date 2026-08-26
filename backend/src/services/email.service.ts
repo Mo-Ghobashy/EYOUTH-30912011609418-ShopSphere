@@ -23,10 +23,10 @@ export async function sendWelcomeEmail({ to, name }: WelcomeEmailInput): Promise
   });
 
   await transporter.sendMail({
-    from: env.SMTP_FROM ?? 'noreply@store.local',
+    from: env.SMTP_FROM ?? 'noreply@shopsphere.local',
     to,
-    subject: 'Welcome to Store!',
-    text: `Hi ${name},\n\nWelcome to Store! Your account has been created successfully.\n\nHappy shopping!`,
-    html: `<p>Hi ${name},</p><p>Welcome to <strong>Store</strong>! Your account has been created successfully.</p><p>Happy shopping!</p>`,
+    subject: 'Welcome to ShopSphere!',
+    text: `Hi ${name},\n\nWelcome to ShopSphere! Your account has been created successfully.\n\nHappy shopping!`,
+    html: `<p>Hi ${name},</p><p>Welcome to <strong>ShopSphere</strong>! Your account has been created successfully.</p><p>Happy shopping!</p>`,
   });
 }
