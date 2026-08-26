@@ -7,10 +7,7 @@ export function getImageUrl(imageUrl: string | null | undefined): string {
     return imageUrl;
   }
 
-  const fallbackApiUrl = import.meta.env.PROD
-    ? 'https://fullstack-ecommerce-store-iq3hj58wr.vercel.app/api'
-    : 'http://localhost:5000/api';
-  const apiUrl = import.meta.env.VITE_API_URL ?? fallbackApiUrl;
+  const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:5000/api';
   const origin = apiUrl.replace(/\/api\/?$/, '');
   return `${origin}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
 }
