@@ -41,18 +41,11 @@ export async function createProductReview(
 }
 
 export async function getReviewStats() {
-  try {
-    const [totalReviews, agg] = await Promise.all([
-      prisma.review.count(),
-      prisma.review.aggregate({ _avg: { rating: true } }),
-    ]);
-
-    return {
-      totalReviews,
-      averageRating: agg._avg.rating ?? 0,
-    };
-  } catch {
-    const totalReviews = await prisma.review.count();
-    return { totalReviews, averageRating: 0 };
-  }
+  const reviews = await prisma.review.findMany({ select: { rating: true } });
+  const totalReviews = reviews.length;
+  const averageRating =
+    totalReviews > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
+      : 0;
+  return { totalReviews, averageRating };
 }
