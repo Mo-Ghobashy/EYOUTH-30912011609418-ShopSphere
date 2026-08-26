@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AppError } from '../middleware/auth';
-import { createProductReview, getProductReviews } from '../services/review.service';
+import { createProductReview, getProductReviews, getReviewStats } from '../services/review.service';
 import { asyncHandler } from '../utils/asyncHandler';
 
 export const listReviews = asyncHandler(async (req: Request, res: Response) => {
