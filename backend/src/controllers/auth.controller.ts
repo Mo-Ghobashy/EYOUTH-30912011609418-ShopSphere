@@ -1,12 +1,21 @@
 import { Request, Response } from 'express';
 import { prisma } from '../config/prisma';
 import { AppError } from '../middleware/errorHandler';
+import { env } from '../config/env';
 import { logActivity } from '../services/activityLog.service';
-import { sendWelcomeEmail } from '../services/email.service';
 import { asyncHandler } from '../utils/asyncHandler';
 import { signToken } from '../utils/jwt';
 import { comparePassword, hashPassword } from '../utils/password';
 import { sanitizeUser } from '../utils/user';
+
+async function triggerWelcomeEmail(email: string, name: string): Promise<void> {
+  const baseUrl = env.EMAIL_SERVICE_URL || `http://localhost:${env.PORT}`;
+  fetch(`${baseUrl}/api/send-welcome-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, name }),
+  }).catch((err) => console.error('Welcome email failed:', err));
+}
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const { email, password, name } = req.body;
@@ -24,7 +33,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
   const token = signToken({ id: user.id, email: user.email, role: user.role });
 
   await logActivity({ userId: user.id, action: 'REGISTER', metadata: { email } });
-  await sendWelcomeEmail({ to: user.email, name: user.name });
+  triggerWelcomeEmail(user.email, user.name);
 
   res.status(201).json({ user: sanitizeUser(user), token });
 });
