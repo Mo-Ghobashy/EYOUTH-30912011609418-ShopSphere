@@ -76,22 +76,19 @@ jobs:
           node-version: 20
 
       - name: Deploy Backend to Vercel
-        working-directory: backend
-        run: npx vercel deploy --prod --yes --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }}
+        run: npx vercel deploy --prod --yes --cwd backend --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BE }}
 
       - name: Deploy Frontend to Vercel
-        working-directory: frontend
-        run: npx vercel deploy --prod --yes --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }}
+        run: npx vercel deploy --prod --yes --cwd frontend --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_FE }}
 
       - name: Deploy Review Service to Vercel
-        working-directory: review-service
-        run: npx vercel deploy --prod --yes --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }}
+        run: npx vercel deploy --prod --yes --cwd review-service --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_REVIEW }}
