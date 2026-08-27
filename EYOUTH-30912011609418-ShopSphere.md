@@ -20,7 +20,7 @@ This document is the project sharing file for ShopSphere. Anyone with the link c
 | Health check (backend) | https://eyouth-shopsphere-api.vercel.app/api/health |
 | Health check (review service) | https://review-service-three.vercel.app/api/health |
 | Welcome-email serverless function | https://eyouth-emailservice.vercel.app |
-| Monitoring (UptimeRobot public status) | _Add your public monitor / status-page URL here_ |
+| Monitoring (UptimeRobot public status) | https://stats.uptimerobot.com/VE47gDJ9Jt |
 
 ## Structured logs (production)
 
