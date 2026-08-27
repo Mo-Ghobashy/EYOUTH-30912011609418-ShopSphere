@@ -5,6 +5,7 @@ import path from 'path';
 import { env } from './config/env';
 import { prisma } from './config/prisma';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
+import { requestLogger } from './middleware/logger';
 import authRoutes from './routes/auth.routes';
 import cartRoutes from './routes/cart.routes';
 import categoryRoutes from './routes/category.routes';
@@ -14,6 +15,7 @@ import statsRoutes from './routes/stats.routes';
 
 const app = express();
 
+app.use(requestLogger);
 app.use(helmet());
 app.use(cors({ origin: env.FRONTEND_URL, credentials: true }));
 app.use(express.json({ limit: '1mb' }));

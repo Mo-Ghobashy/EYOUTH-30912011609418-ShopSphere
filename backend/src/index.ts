@@ -1,10 +1,14 @@
 import app from './app';
 import { env } from './config/env';
 import { prisma } from './config/prisma';
+import { logger } from './middleware/logger';
 
 async function start(): Promise<void> {
   const server = app.listen(env.PORT, () => {
-    console.log(`Server running on http://localhost:${env.PORT}`);
+    logger.info(
+      { port: env.PORT, env: env.NODE_ENV },
+      'server started',
+    );
   });
 
   const shutdown = async () => {
@@ -18,6 +22,6 @@ async function start(): Promise<void> {
 }
 
 start().catch((err) => {
-  console.error('Failed to start server:', err);
+  logger.error({ err }, 'failed to start server');
   process.exit(1);
 });

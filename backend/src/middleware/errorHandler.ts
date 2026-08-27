@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { env } from '../config/env';
+import { logger } from './logger';
 
 export class AppError extends Error {
   constructor(
@@ -36,6 +37,19 @@ export function errorHandler(
 
   if (env.NODE_ENV === 'development' && !(err instanceof AppError)) {
     console.error(err);
+  }
+
+  const logPayload = {
+    method: _req.method,
+    url: _req.originalUrl,
+    statusCode,
+    message,
+    err,
+  };
+  if (statusCode >= 500) {
+    logger.error(logPayload, 'error handler: request failed');
+  } else if (statusCode >= 400) {
+    logger.warn(logPayload, 'error handler: request rejected');
   }
 
   res.status(statusCode).json({

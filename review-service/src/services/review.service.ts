@@ -1,7 +1,7 @@
 import { prisma } from '../config/prisma';
 import { reviewListQuerySchema } from '../schemas/review.schema';
 
-export async function getProductReviews(productId: string, query: unknown) {
+export async function getProductReviews(productId: string, query: Record<string, unknown>) {
   const { page, limit } = reviewListQuerySchema.parse({ ...query, productId });
   const skip = (page - 1) * limit;
 
