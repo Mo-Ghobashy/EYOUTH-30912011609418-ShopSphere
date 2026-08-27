@@ -19,7 +19,7 @@ This document is the project sharing file for ShopSphere. Anyone with the link c
 | Backend API | https://eyouth-shopsphere-api.vercel.app |
 | Health check (backend) | https://eyouth-shopsphere-api.vercel.app/api/health |
 | Health check (review service) | https://review-service-three.vercel.app/api/health |
-| Welcome-email serverless function | _Add Vercel URL after deploying `EYOUTH-30912011609418-ShopSphere-email`_ |
+| Welcome-email serverless function | https://eyouth-emailservice.vercel.app |
 | Monitoring (UptimeRobot public status) | _Add your public monitor / status-page URL here_ |
 
 ## Structured logs (production)

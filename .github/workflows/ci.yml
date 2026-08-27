@@ -14,6 +14,7 @@ jobs:
   build-and-test:
     name: Install, Build & Test
     runs-on: ubuntu-latest
+    environment: development
     steps:
       - name: Checkout
         uses: actions/checkout@v4
