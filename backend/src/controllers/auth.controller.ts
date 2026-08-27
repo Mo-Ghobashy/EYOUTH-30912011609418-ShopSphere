@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../config/prisma';
 import { AppError } from '../middleware/errorHandler';
+import { logger } from '../middleware/logger';
 import { env } from '../config/env';
 import { logActivity } from '../services/activityLog.service';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -10,11 +11,18 @@ import { sanitizeUser } from '../utils/user';
 
 async function triggerWelcomeEmail(email: string, name: string): Promise<void> {
   const baseUrl = env.EMAIL_SERVICE_URL || `http://localhost:${env.PORT}`;
+  if (env.NODE_ENV === 'production' && !env.EMAIL_SERVICE_URL) {
+    logger.warn(
+      { email },
+      'EMAIL_SERVICE_URL not set; welcome email will not be sent',
+    );
+    return;
+  }
   fetch(`${baseUrl}/api/send-welcome-email`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, name }),
-  }).catch((err) => console.error('Welcome email failed:', err));
+  }).catch((err) => logger.error({ err }, 'welcome email failed'));
 }
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
