@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: aws-simulation
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head><title>ShopSphere - AWS Simulation</title></head>
+    <body style="font-family: Arial; text-align: center; padding: 50px;">
+      <h1>ShopSphere Frontend</h1>
+      <p>Simulated on AWS (EKS)</p>
+      <p>Namespace: aws-simulation</p>
+    </body>
+    </html>

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: gcp-simulation
+  labels:
+    app: shopsphere-backend
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shopsphere-backend
+  template:
+    metadata:
+      labels:
+        app: shopsphere-backend
+        tier: backend
+    spec:
+      containers:
+        - name: backend
+          image: node:20-alpine
+          command:
+            - node
+            - -e
+            - |
+              const http = require('http');
+              const server = http.createServer((req, res) => {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ status: 'ok', namespace: 'gcp-simulation', service: 'backend' }));
+              });
+              server.listen(5000, () => console.log('Backend running on port 5000'));
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
