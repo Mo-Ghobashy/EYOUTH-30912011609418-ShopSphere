@@ -45,19 +45,19 @@ The production deployment itself: frontend URL, backend URL, health-check endpoi
 
 What it proves: the public frontend opens for anyone over HTTPS.
 
-![Frontend loading over HTTPS](image.png)
+![Frontend loading over HTTPS](EYOUTH-30912011609418-ShopSphere-screenshots/image.png)
 
 **1.2 - Backend health check 200**
 
 What it proves: the backend is live and healthy (`/api/health` returns `200` / `{"status":"ok",...}`).
 
-![Backend health check returning 200](image-1.png)
+![Backend health check returning 200](EYOUTH-30912011609418-ShopSphere-screenshots/image-1.png)
 
 **1.3 - Frontend API calls to production**
 
 What it proves: the frontend talks to the production backend (Network tab shows calls to `https://eyouth-shopsphere-api.vercel.app/api/`, not `localhost`).
 
-![Frontend network tab showing production API calls](image-2.png)
+![Frontend network tab showing production API calls](EYOUTH-30912011609418-ShopSphere-screenshots/image-2.png)
 
 **1.4 - Rate limiting returns 429**
 
@@ -69,7 +69,7 @@ What it proves: rate limiting is active (11 rapid login attempts return `429 Too
 
 What it proves: monitoring is live and public (both monitors show `UP` in an incognito window).
 
-![UptimeRobot public status page showing monitors UP](image-3.png)
+![UptimeRobot public status page showing monitors UP](EYOUTH-30912011609418-ShopSphere-screenshots/image-3.png)
 
 ---
 
@@ -102,13 +102,13 @@ What it proves: the architecture diagram deliverable (export the `.drawio` as a 
 
 What it proves: two namespaces exist (`aws-simulation` and `gcp-simulation`).
 
-![kubectl get ns showing both namespaces](image-11.png)
+![kubectl get ns showing both namespaces](EYOUTH-30912011609418-ShopSphere-screenshots/image-11.png)
 
 **2.3 - AWS namespace resources**
 
 What it proves: `kubectl -n aws-simulation get all` shows pods and services `Running` in the AWS namespace.
 
-![AWS namespace pods and services running](image-12.png)
+![AWS namespace pods and services running](EYOUTH-30912011609418-ShopSphere-screenshots/image-12.png)
 
 **2.4 - GCP namespace resources**
 
@@ -120,19 +120,19 @@ What it proves: `kubectl -n gcp-simulation get all` shows pods and services `Run
 
 What it proves: each `get all` lists only its own pods (the `aws-simulation` and `gcp-simulation` listings are shown side by side, with no cross-listing), so resources are isolated.
 
-![Namespace isolation between aws and gcp](image-13.png)
+![Namespace isolation between aws and gcp](EYOUTH-30912011609418-ShopSphere-screenshots/image-13.png)
 
 **2.6 - AWS frontend port-forward**
 
 What it proves: the AWS frontend Service responds via port-forward (`http://localhost:8080` shows "Simulated on AWS (EKS) / Namespace: aws-simulation").
 
-![AWS frontend page via port-forward](image-14.png)
+![AWS frontend page via port-forward](EYOUTH-30912011609418-ShopSphere-screenshots/image-14.png)
 
 **2.7 - GCP backend port-forward**
 
 What it proves: the GCP backend Service responds via port-forward (`http://localhost:5001` returns the gcp JSON).
 
-![GCP backend JSON via port-forward](image-15.png)
+![GCP backend JSON via port-forward](EYOUTH-30912011609418-ShopSphere-screenshots/image-15.png)
 
 ---
 
@@ -159,13 +159,13 @@ The URL of the deployed review service, the serverless function in working order
 
 What it proves: a product page in ShopSphere displays reviews retrieved from the review service; reviews are shown via the microservice REST interface.
 
-![ShopSphere product page showing reviews](image-4.png)
+![ShopSphere product page showing reviews](EYOUTH-30912011609418-ShopSphere-screenshots/image-4.png)
 
 **3.2 - Welcome email received**
 
 What it proves: the serverless function sends emails end-to-end (a freshly received "Welcome" email after registering a new account).
 
-![Welcome email received in the inbox](image-6.png)
+![Welcome email received in the inbox](EYOUTH-30912011609418-ShopSphere-screenshots/image-6.png)
 
 **3.3 - Review service working** *(optional)*
 
@@ -202,25 +202,25 @@ The pipeline on the repository, the rollback plan document, and the project link
 
 What it proves: a complete pipeline run reached production (`Install, Build & Test` and `Deploy to Production` both pass on `main`).
 
-![GitHub Actions run showing Install, Build and Test passing](image-7.png)
+![GitHub Actions run showing Install, Build and Test passing](EYOUTH-30912011609418-ShopSphere-screenshots/image-7.png)
 
 **4.2 - No secrets in run logs**
 
 What it proves: no credential appears in the run logs (the deploy job logs show secret references as masked or absent; a search for the real token finds nothing).
 
-![Deploy to Production job logs showing masked secrets](image-8.png)
+![Deploy to Production job logs showing masked secrets](EYOUTH-30912011609418-ShopSphere-screenshots/image-8.png)
 
 **4.3 - Three environments**
 
 What it proves: the three environments exist.
 
-![GitHub environments development, staging and production](image-9.png)
+![GitHub environments development, staging and production](EYOUTH-30912011609418-ShopSphere-screenshots/image-9.png)
 
 **4.4 - Branch protection ruleset**
 
 What it proves: main is branch-protected (a ruleset on `main` requires the `Install, Build & Test` check).
 
-![GitHub ruleset on main requiring the check](image-10.png)
+![GitHub ruleset on main requiring the check](EYOUTH-30912011609418-ShopSphere-screenshots/image-10.png)
 
 Note - the rollback plan: the rollback plan is a repository file (`EYOUTH-30912011609418-ShopSphere-Task4/EYOUTH-30912011609418-ShopSphere-rollback.md`), no screenshot required.
 
