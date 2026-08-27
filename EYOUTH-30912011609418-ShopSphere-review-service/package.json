@@ -1,5 +1,5 @@
 {
-  "name": "review-service",
+  "name": "EYOUTH-30912011609418-ShopSphere-review-service",
   "version": "1.0.0",
   "description": "Independent review microservice for ShopSphere",
   "main": "dist/index.js",

@@ -26,7 +26,7 @@ jobs:
           cache-dependency-path: |
             backend/package-lock.json
             frontend/package-lock.json
-            review-service/package-lock.json
+            EYOUTH-30912011609418-ShopSphere-review-service/package-lock.json
 
       - name: Backend - Install
         working-directory: backend
@@ -53,11 +53,11 @@ jobs:
         run: npm test
 
       - name: Review Service - Install
-        working-directory: review-service
+        working-directory: EYOUTH-30912011609418-ShopSphere-review-service
         run: npm ci
 
       - name: Review Service - Build
-        working-directory: review-service
+        working-directory: EYOUTH-30912011609418-ShopSphere-review-service
         run: npm run build
 
   deploy:
@@ -103,4 +103,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_REVIEW }}
           experimental-api: true
           target: production
-          root-directory: ./review-service
+          root-directory: ./EYOUTH-30912011609418-ShopSphere-review-service
