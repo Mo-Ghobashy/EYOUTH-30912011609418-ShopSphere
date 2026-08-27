@@ -10,15 +10,15 @@ import { comparePassword, hashPassword } from '../utils/password';
 import { sanitizeUser } from '../utils/user';
 
 async function triggerWelcomeEmail(email: string, name: string): Promise<void> {
-  const baseUrl = env.EMAIL_SERVICE_URL || `http://localhost:${env.PORT}`;
-  if (env.NODE_ENV === 'production' && !env.EMAIL_SERVICE_URL) {
+  const emailServiceUrl = env.EMAIL_SERVICE_URL;
+  if (!emailServiceUrl) {
     logger.warn(
       { email },
       'EMAIL_SERVICE_URL not set; welcome email will not be sent',
     );
     return;
   }
-  fetch(`${baseUrl}/api/send-welcome-email`, {
+  fetch(emailServiceUrl.replace(/\/$/, ''), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, name }),

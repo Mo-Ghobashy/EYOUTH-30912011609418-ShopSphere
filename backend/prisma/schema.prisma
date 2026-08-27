@@ -26,7 +26,6 @@ model User {
   createdAt    DateTime      @default(now())
   cartItems    CartItem[]
   orders       Order[]
-  reviews      Review[]
   activityLogs ActivityLog[]
 }
 
@@ -48,7 +47,6 @@ model Product {
   category    Category   @relation(fields: [categoryId], references: [id])
   createdAt   DateTime   @default(now())
   cartItems   CartItem[]
-  reviews     Review[]
 }
 
 model CartItem {
@@ -92,20 +90,6 @@ model OrderItem {
   name      String
   price     Decimal @db.Decimal(10, 2)
   quantity  Int
-}
-
-model Review {
-  id        String   @id @default(uuid())
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userName  String
-  rating    Int
-  comment   String
-  createdAt DateTime @default(now())
-
-  @@index([productId])
 }
 
 model ActivityLog {

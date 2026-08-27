@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, staging]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,6 +14,7 @@ jobs:
   build-and-test:
     name: Install, Build & Test
     runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'pull_request' && 'preview' || (github.ref == 'refs/heads/staging' && 'staging' || 'production') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,6 +28,7 @@ jobs:
             backend/package-lock.json
             frontend/package-lock.json
             EYOUTH-30912011609418-ShopSphere-review-service/package-lock.json
+            EYOUTH-30912011609418-ShopSphere-email/package-lock.json
 
       - name: Backend - Install
         working-directory: backend
@@ -60,7 +62,62 @@ jobs:
         working-directory: EYOUTH-30912011609418-ShopSphere-review-service
         run: npm run build
 
-  deploy:
+      - name: Email Function - Install
+        working-directory: EYOUTH-30912011609418-ShopSphere-email
+        run: npm ci
+
+  deploy-staging:
+    name: Deploy to Staging
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Deploy Backend to Vercel (staging)
+        uses: amondnet/vercel-action@v42
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_BE_STAGING }}
+          experimental-api: true
+          root-directory: ./backend
+
+      - name: Deploy Frontend to Vercel (staging)
+        uses: amondnet/vercel-action@v42
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_FE_STAGING }}
+          experimental-api: true
+          root-directory: ./frontend
+
+      - name: Deploy Review Service to Vercel (staging)
+        uses: amondnet/vercel-action@v42
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_REVIEW_STAGING }}
+          experimental-api: true
+          root-directory: ./EYOUTH-30912011609418-ShopSphere-review-service
+
+      - name: Deploy Email Function to Vercel (staging)
+        uses: amondnet/vercel-action@v42
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_EMAIL_STAGING }}
+          experimental-api: true
+          root-directory: ./EYOUTH-30912011609418-ShopSphere-email
+
+  deploy-production:
     name: Deploy to Production
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build-and-test
@@ -104,3 +161,13 @@ jobs:
           experimental-api: true
           target: production
           root-directory: ./EYOUTH-30912011609418-ShopSphere-review-service
+
+      - name: Deploy Email Function to Vercel
+        uses: amondnet/vercel-action@v42
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_EMAIL }}
+          experimental-api: true
+          target: production
+          root-directory: ./EYOUTH-30912011609418-ShopSphere-email

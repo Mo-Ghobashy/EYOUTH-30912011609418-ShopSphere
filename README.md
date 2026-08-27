@@ -2,20 +2,24 @@
 
 A secure full-stack e-commerce application built with a React frontend, an Express API,
 and PostgreSQL via Prisma ORM storing users, products, categories, cart items, orders,
-product reviews, and activity logs. Includes JWT authentication, role-based access
-control, a shopping cart, and a full checkout flow with server-side payment validation.
+and activity logs. Product reviews live in a separate review microservice. Includes JWT
+authentication, role-based access control, a shopping cart, and a full checkout flow
+with server-side payment validation.
 
 ## Project URLs
 
 | Resource | URL |
 |----------|-----|
-| GitHub Repository | https://github.com/Mo-Ghobashy/fullstack-ecommerce-store |
+| GitHub Repository | https://github.com/Mo-Ghobashy/EYOUTH-30912011609418-ShopSphere |
+| Links document | [EYOUTH-30912011609418-ShopSphere.md](EYOUTH-30912011609418-ShopSphere.md) |
+| Frontend (production) | https://eyouth-shopsphere.vercel.app |
+| Backend API (production) | https://eyouth-shopsphere-api.vercel.app |
+| Health check (production) | https://eyouth-shopsphere-api.vercel.app/api/health |
+| Review service | https://review-service-three.vercel.app |
 | Frontend (local dev) | http://localhost:5173 |
 | Frontend (Docker) | http://localhost |
-| Backend API | http://localhost:5000/api |
-| Health check | http://localhost:5000/api/health |
-| Frontend (production) | _Add Vercel URL after deploying_ |
-| Backend (production) | _Add Vercel URL after deploying_ |
+| Backend API (local) | http://localhost:5000/api |
+| Health check (local) | http://localhost:5000/api/health |
 
 ## Tech Stack
 
@@ -23,7 +27,7 @@ control, a shopping cart, and a full checkout flow with server-side payment vali
 |-------|--------------|
 | Frontend | React 19, Vite, TypeScript, Tailwind CSS v4, React Router, TanStack Query, Axios, Context API |
 | Backend | Express 5, TypeScript, Zod, JWT, bcrypt, Multer, Nodemailer |
-| Databases | PostgreSQL (Prisma ORM) — users, products, categories, cart, orders, reviews, activity logs |
+| Databases | PostgreSQL (Prisma ORM) — users, products, categories, cart, orders, activity logs. Reviews: separate microservice. |
 | Testing | Jest + Supertest (backend), Vitest + React Testing Library + MSW (frontend) |
 | DevOps | Docker, Docker Compose, nginx |
 
@@ -86,7 +90,7 @@ control, a shopping cart, and a full checkout flow with server-side payment vali
 │   │   ├── middleware/       # Auth (JWT), RBAC, validation, upload, errors
 │   │   ├── routes/           # Route definitions
 │   │   ├── schemas/          # Zod validation schemas
-│   │   ├── services/         # Email, payment, stats, review, activity log
+│   │   ├── services/         # Payment, stats, review proxy, activity log
 │   │   └── utils/            # JWT, password hashing, helpers
 │   └── tests/                # Jest unit + Supertest integration tests
 ├── frontend/                 # React SPA (Vite), Vitest tests
@@ -98,7 +102,11 @@ control, a shopping cart, and a full checkout flow with server-side payment vali
 │   │   ├── pages/            # One file per page
 │   │   ├── routes/           # ProtectedRoute, AdminRoute guards
 │   │   └── types/ utils/     # Shared types and helpers
+├── EYOUTH-30912011609418-ShopSphere-review-service/  # Reviews microservice
+├── EYOUTH-30912011609418-ShopSphere-email/           # Welcome-email serverless function
+├── k8s-simulation/           # aws-simulation + gcp-simulation namespaces
 ├── docker-compose.yml        # postgres, backend, frontend
+├── EYOUTH-30912011609418-ShopSphere.md  # Project sharing / links document
 ├── .env.example              # Root env template for Docker Compose
 └── README.md
 ```
@@ -271,7 +279,9 @@ No secret value is ever committed to the repository — only `.env.example` temp
 | `FRONTEND_URL` | Allowed CORS origin |
 | `VITE_API_URL` | API URL baked into the frontend build |
 | `UPLOAD_DIR` | Uploaded images directory |
-| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` | Optional email settings (welcome email skipped if empty) |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` | SMTP for the **email function** (not the main API) |
+| `REVIEW_SERVICE_URL` | Base URL of the review microservice |
+| `EMAIL_SERVICE_URL` | Base URL of the standalone welcome-email Vercel function |
 
 ### Backend `.env` (local dev)
 
@@ -279,18 +289,11 @@ Copy from `backend/.env.example`. Use `localhost` hostnames for databases.
 
 ```
 FRONTEND_URL=http://localhost:5173
+REVIEW_SERVICE_URL=http://localhost:5001
+EMAIL_SERVICE_URL=http://localhost:3001
 ```
 
-To send real welcome emails, configure SMTP (Gmail requires an App Password;
-https://ethereal.email works well for testing):
-
-```
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your@gmail.com
-SMTP_PASS=your-app-password
-SMTP_FROM=your@gmail.com
-```
+SMTP is configured on the **email function** project (`EYOUTH-30912011609418-ShopSphere-email`), not on the main API.
 
 ### Frontend `.env` (local dev)
 
@@ -313,6 +316,19 @@ VITE_API_URL=http://localhost:5000/api
 - **Card data** — full PAN never stored or logged; only brand + last 4 digits saved with the order
 - **File upload** — JPEG/PNG/WebP only, 5 MB max
 - **Secrets** — never committed; environment variables only
+
+---
+
+## Structured logging
+
+The backend uses [Pino](https://getpino.io/). Every **request** log and **error** log includes:
+
+- **Timestamp** — ISO-8601 via `pino.stdTimeFunctions.isoTime`
+- **Severity level** — `INFO` (completed requests), `WARN` (4xx), `ERROR` (5xx and failures)
+
+Example request entry: method, URL, status, duration, IP, plus `time` and `level`.
+
+**Where to read the logs in production:** Vercel Dashboard → project **eyouth-shopsphere-api** → **Logs** (Runtime Logs).
 
 ---
 
@@ -404,10 +420,11 @@ Deployment checklist:
 
 1. Create Supabase project → copy the connection string (use port `5432`, append `?sslmode=require`)
 2. Apply migrations: set `DATABASE_URL` to Supabase and run `npx prisma migrate deploy`
-4. Deploy backend to Vercel with env vars: `DATABASE_URL`, `DIRECT_DATABASE_URL`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `FRONTEND_URL` (set to the frontend's Vercel URL), optional `SMTP_*`
-5. Deploy frontend to Vercel with build env var `VITE_API_URL` pointing at the backend URL
-6. Verify HTTPS, CORS, Helmet headers, and rate limiting are active on the deployed backend
-7. Register the public health-check URL in UptimeRobot (HTTP monitor)
+4. Deploy backend to Vercel with env vars: `DATABASE_URL`, `DIRECT_DATABASE_URL`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `FRONTEND_URL`, `REVIEW_SERVICE_URL`, `EMAIL_SERVICE_URL`
+5. Deploy `EYOUTH-30912011609418-ShopSphere-email` as its own Vercel project; put SMTP vars on **that** project
+6. Deploy frontend to Vercel with build env var `VITE_API_URL` pointing at the backend URL
+7. Verify HTTPS, CORS, Helmet headers, and rate limiting are active on the deployed backend
+8. Register the public health-check URL in UptimeRobot (HTTP monitor); paste the public status URL into `EYOUTH-30912011609418-ShopSphere.md`
 
 ---
 
@@ -421,7 +438,7 @@ Deployment checklist:
 | Integration tests wipe dev data | They don't anymore — tests use `ecommerce_test`; make sure it exists (see Testing section) |
 | Integration tests fail randomly when run directly with jest | Use `npm test` (serial execution); parallel workers share one test DB and conflict |
 | Docker won't start | Ensure Docker Desktop is running; check `docker compose logs` |
-| Welcome email not sent | Expected when SMTP is empty; configure `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS` in `backend/.env` |
+| Welcome email not sent | Set `EMAIL_SERVICE_URL` on the backend; configure SMTP on the email Vercel project |
 | Payment declined in testing | Cards ending in `034` are intentionally declined; use `4242 4242 4242 4242` |
 | Product update fails on large price | Price must fit `DECIMAL(10,2)` — max `99,999,999.99` |
 
