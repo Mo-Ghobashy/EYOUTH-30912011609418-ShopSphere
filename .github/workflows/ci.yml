@@ -14,7 +14,6 @@ jobs:
   build-and-test:
     name: Install, Build & Test
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'pull_request' && 'preview' || (github.ref == 'refs/heads/staging' && 'staging' || 'production') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
