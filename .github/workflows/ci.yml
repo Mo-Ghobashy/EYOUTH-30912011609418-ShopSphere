@@ -76,25 +76,31 @@ jobs:
           node-version: 20
 
       - name: Deploy Backend to Vercel
-        uses: vercel/actions/deploy@v1
+        uses: amondnet/vercel-action@v42
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_BE }}
-          production: true
+          experimental-api: true
+          target: production
+          root-directory: ./backend
 
       - name: Deploy Frontend to Vercel
-        uses: vercel/actions/deploy@v1
+        uses: amondnet/vercel-action@v42
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_FE }}
-          production: true
+          experimental-api: true
+          target: production
+          root-directory: ./frontend
 
       - name: Deploy Review Service to Vercel
-        uses: vercel/actions/deploy@v1
+        uses: amondnet/vercel-action@v42
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_REVIEW }}
-          production: true
+          experimental-api: true
+          target: production
+          root-directory: ./review-service
