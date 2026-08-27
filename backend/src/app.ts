@@ -13,11 +13,26 @@ import orderRoutes from './routes/order.routes';
 import productRoutes from './routes/product.routes';
 import statsRoutes from './routes/stats.routes';
 
+const isAllowedOrigin = (origin: string | undefined): boolean => {
+  if (!origin) return true;
+  if (origin === env.FRONTEND_URL) return true;
+  const host = origin.startsWith('https://') ? origin.slice('https://'.length) : origin;
+  if (/\.vercel\.app$/i.test(host)) return true;
+  return false;
+};
+
 const app = express();
 
 app.use(requestLogger);
 app.use(helmet());
-app.use(cors({ origin: env.FRONTEND_URL, credentials: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      callback(null, isAllowedOrigin(origin));
+    },
+    credentials: true,
+  }),
+);
 app.use(express.json({ limit: '1mb' }));
 app.use('/uploads', express.static(path.join(process.cwd(), env.UPLOAD_DIR)));
 
