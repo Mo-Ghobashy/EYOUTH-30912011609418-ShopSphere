@@ -21,6 +21,16 @@ with server-side payment validation.
 | Backend API (local) | http://localhost:5000/api |
 | Health check (local) | http://localhost:5000/api/health |
 
+## Project Documents by Task
+
+| Task | Document |
+|------|----------|
+| Task 2 — Architecture & classification | [`EYOUTH-30912011609418-ShopSphere-Task2/`](EYOUTH-30912011609418-ShopSphere-Task2/) (diagram `.drawio` + classification) |
+| Task 2 — Kubernetes simulation | [`k8s-simulation/README.md`](k8s-simulation/README.md) (namespaces, manifests, kubectl) |
+| Task 3 — Architecture Decision Record | [`EYOUTH-30912011609418-ShopSphere-Task3/`](EYOUTH-30912011609418-ShopSphere-Task3/) |
+| Task 4 — Rollback plan | [`EYOUTH-30912011609418-ShopSphere-Task4/`](EYOUTH-30912011609418-ShopSphere-Task4/) |
+| Task 4 — Submission / links door | [`EYOUTH-30912011609418-ShopSphere.md`](EYOUTH-30912011609418-ShopSphere.md) |
+
 ## Tech Stack
 
 | Layer | Technologies |
